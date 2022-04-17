@@ -1,9 +1,23 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import React from 'react'
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react'
+import App from './App'
+
+it('should show data', async () => {
+  render(<App />)
+
+  expect(
+    screen.getByRole('heading', { name: /Hello CodeSandbox/ })
+  ).toBeVisible()
+
+  await screen.findByTestId(/loading/)
+
+  await waitForElementToBeRemoved(screen.queryByTestId(/loading/))
+
+  expect(screen.getByText(/123/)).toBeVisible()
+})
